@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reaktionstest Pro</title>
-    <link href="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" rel="stylesheet">
+    <title>Professional Reaction Timer</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
             margin: 0;
@@ -13,724 +13,280 @@
         }
 
         :root {
-            --bg-primary: #000000;
-            --bg-secondary: #1c1c1e;
-            --bg-tertiary: #2c2c2e;
-            --text-primary: #ffffff;
-            --text-secondary: #8e8e93;
-            --accent: #0a84ff;
-            --accent-hover: #0071e3;
-            --success: #30d158;
-            --warning: #ff9f0a;
-            --danger: #ff453a;
-            --glass: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            --transition: cubic-bezier(0.4, 0, 0.2, 1);
-            --gold: #ffd700;
-            --platinum: #e5e4e2;
-            --bronze: #cd7f32;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary: #64748b;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --background: #ffffff;
+            --surface: #f8fafc;
+            --surface-elevated: #ffffff;
+            --border: #e2e8f0;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius: 8px;
+            --radius-lg: 12px;
         }
 
-        body.light-mode {
-            --bg-primary: #f2f2f7;
-            --bg-secondary: #ffffff;
-            --bg-tertiary: #f2f2f7;
-            --text-primary: #000000;
-            --text-secondary: #8e8e93;
-            --accent: #007aff;
-            --accent-hover: #0051d5;
-            --glass: rgba(255, 255, 255, 0.8);
-            --glass-border: rgba(0, 0, 0, 0.1);
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        body.dark {
+            --background: #0f172a;
+            --surface: #1e293b;
+            --surface-elevated: #334155;
+            --border: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
-            background: var(--bg-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background);
             color: var(--text-primary);
             line-height: 1.6;
-            overflow: hidden;
-            transition: all 0.3s var(--transition);
-            height: 100vh;
-            margin: 0;
+            transition: all 0.2s ease;
         }
 
-        /* Enhanced Animated Background with Particles */
-        .background-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: 
-                radial-gradient(ellipse at 20% 50%, rgba(138, 43, 226, 0.3) 0%, transparent 40%),
-                radial-gradient(ellipse at 80% 20%, rgba(0, 191, 255, 0.3) 0%, transparent 40%),
-                radial-gradient(ellipse at 40% 80%, rgba(255, 20, 147, 0.3) 0%, transparent 40%),
-                radial-gradient(ellipse at 60% 60%, rgba(255, 215, 0, 0.2) 0%, transparent 50%),
-                linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #16213e 75%, #1a1a2e 100%);
-            opacity: 1;
-            animation: premium-gradient-flow 30s ease-in-out infinite;
-            background-size: 200% 200%;
-        }
-
-        .background-animation::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-                radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-            background-size: 100px 100px, 150px 150px, 80px 80px;
-            animation: float-particles 30s linear infinite;
-        }
-
-        body.no-bg-animation .background-animation { display: none; }
-        body.no-particles .background-animation::before { display: none; }
-
-        @keyframes premium-gradient-flow {
-            0%, 100% { 
-                background-position: 0% 50%;
-                filter: hue-rotate(0deg) brightness(1);
-            }
-            25% { 
-                background-position: 100% 50%;
-                filter: hue-rotate(45deg) brightness(1.1);
-            }
-            50% { 
-                background-position: 0% 50%;
-                filter: hue-rotate(90deg) brightness(1.2);
-            }
-            75% { 
-                background-position: 100% 50%;
-                filter: hue-rotate(45deg) brightness(1.1);
-            }
-        }
-
-        @keyframes float-particles {
-            from { transform: translateY(0px) translateX(0px); }
-            to { transform: translateY(-100px) translateX(50px); }
-        }
-        
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
-            height: 100vh;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
+            padding: 24px;
+            min-height: 100vh;
         }
-        
+
         /* Header */
-        header {
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 50px;
-            backdrop-filter: blur(20px);
-            background: var(--glass);
-            padding: 25px 40px;
-            border-radius: 20px;
-            border: 1px solid var(--glass-border);
-            box-shadow: var(--shadow);
-            animation: slide-down 0.6s var(--transition);
+            margin-bottom: 32px;
+            padding: 24px 0;
+            border-bottom: 1px solid var(--border);
         }
 
-        @keyframes slide-down {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
         }
-        
-        .logo-section {
+
+        .header-controls {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 16px;
         }
 
-        .logo {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--accent), var(--success));
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 24px;
-            color: white;
-            animation: logo-pulse 2s ease infinite;
-        }
-
-        @keyframes logo-pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 600;
-            background: linear-gradient(135deg, var(--accent), var(--success));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .subtitle {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            font-weight: 400;
-        }
-
-        /* Mode Toggle */
-        .mode-toggle {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .toggle-switch {
-            position: relative;
-            width: 60px;
-            height: 32px;
-            background: var(--bg-tertiary);
-            border-radius: 20px;
+        .theme-toggle {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 8px 12px;
             cursor: pointer;
-            transition: all 0.3s var(--transition);
+            transition: all 0.2s ease;
+            font-size: 14px;
         }
 
-        .toggle-switch::after {
-            content: '';
-            position: absolute;
-            width: 26px;
-            height: 26px;
-            background: white;
-            border-radius: 50%;
-            top: 3px;
-            left: 3px;
-            transition: all 0.3s var(--transition);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        .theme-toggle:hover {
+            background: var(--surface-elevated);
         }
 
-        body.light-mode .toggle-switch::after {
-            transform: translateX(28px);
-            background: var(--accent);
-        }
-
-        /* Main Grid */
-        .main-grid {
+        /* Main Layout */
+        .main-layout {
             display: grid;
             grid-template-columns: 300px 1fr 300px;
-            gap: 20px;
-            animation: fade-in 0.8s var(--transition) 0.2s both;
-            flex: 1;
-            overflow: hidden;
-            min-height: 0;
+            gap: 24px;
+            align-items: start;
         }
 
-        @keyframes fade-in {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Enhanced Glass Panel */
-        .glass-panel {
-            backdrop-filter: blur(30px) saturate(180%);
-            background: var(--glass);
-            border-radius: 28px;
-            padding: 35px;
-            border: 1px solid var(--glass-border);
+        .panel {
+            background: var(--surface-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
             box-shadow: var(--shadow);
-            transition: all 0.4s var(--transition);
-            position: relative;
-            overflow: hidden;
         }
 
-        .glass-panel::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .glass-panel::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
-            opacity: 0;
-            transition: all 0.6s var(--transition);
-            pointer-events: none;
-        }
-
-        .glass-panel:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(10, 132, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .glass-panel:hover::before {
-            opacity: 1;
-        }
-
-        .glass-panel:hover::after {
-            opacity: 1;
-            transform: scale(1.1) rotate(45deg);
-        }
-
-        /* Settings Panel */
         .panel-title {
-            font-size: 1.3rem;
+            font-size: 18px;
             font-weight: 600;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .panel-title::before {
-            content: '';
-            width: 4px;
-            height: 20px;
-            background: var(--accent);
-            border-radius: 2px;
-        }
-
-        .setting-group {
-            margin-bottom: 25px;
-            opacity: 0;
-            animation: slide-in-left 0.5s var(--transition) forwards;
-        }
-
-        .setting-group:nth-child(2) { animation-delay: 0.1s; }
-        .setting-group:nth-child(3) { animation-delay: 0.2s; }
-        .setting-group:nth-child(4) { animation-delay: 0.3s; }
-        .setting-group:nth-child(5) { animation-delay: 0.4s; }
-
-        @keyframes slide-in-left {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .setting-label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: 10px;
-            color: var(--text-secondary);
-        }
-
-        input, select {
-            width: 100%;
-            padding: 14px 18px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            font-size: 1rem;
+            margin-bottom: 20px;
             color: var(--text-primary);
-            transition: all 0.2s var(--transition);
         }
 
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.1);
-            transform: scale(1.02);
-        }
-
-        /* Enhanced Buttons */
-        .button-group {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            margin-top: 35px;
-        }
-
-        button {
-            padding: 18px 28px;
-            border: none;
-            border-radius: 16px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s var(--transition);
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-        }
-
-        button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 70%, transparent 100%);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: all 0.5s var(--transition);
-            pointer-events: none;
-        }
-
-        button::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.6s ease;
-        }
-
-        button:hover::after {
-            left: 100%;
-        }
-
-        button:active::before {
-            width: 400px;
-            height: 400px;
-            transition: all 0.1s ease;
-        }
-
-        .primary-button {
-            background: linear-gradient(135deg, var(--accent), var(--accent-hover), var(--accent));
-            background-size: 200% 200%;
-            color: white;
-            box-shadow: 0 10px 20px rgba(10, 132, 255, 0.3), 0 4px 8px rgba(10, 132, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: gradient-pulse 3s ease infinite;
-        }
-
-        @keyframes gradient-pulse {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        .primary-button:hover:not(:disabled) {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(10, 132, 255, 0.4), 0 8px 16px rgba(10, 132, 255, 0.3);
-            animation-duration: 1s;
-        }
-
-        .primary-button:active:not(:disabled) {
-            transform: translateY(-2px) scale(0.98);
-            transition: all 0.1s ease;
-        }
-
-        .primary-button:disabled {
-            background: var(--bg-tertiary);
-            color: var(--text-secondary);
-            cursor: not-allowed;
-            box-shadow: none;
-            animation: none;
-            transform: none;
-        }
-
-        .secondary-button {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-            border: 1px solid var(--glass-border);
-        }
-
-        .secondary-button:hover {
-            background: var(--bg-secondary);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Enhanced Test Area */
-        .test-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            height: 100%;
-            overflow: hidden;
-        }
-
+        /* Test Area */
         .test-area {
-            backdrop-filter: blur(40px) saturate(180%);
-            background: var(--glass);
-            border-radius: 36px;
-            padding: 60px 40px;
+            background: var(--surface-elevated);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 80px 40px;
             text-align: center;
-            flex: 1;
+            min-height: 400px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            border: 2px solid var(--glass-border);
-            transition: all 0.4s var(--transition);
+            transition: all 0.2s ease;
             position: relative;
-            overflow: hidden;
-            box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        }
-
-        .test-area::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
-            opacity: 0;
-            transition: all 0.6s var(--transition);
-            animation: rotate-gradient 20s linear infinite;
-        }
-
-        @keyframes rotate-gradient {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
         }
 
         .test-area.waiting {
-            background: linear-gradient(135deg, rgba(255, 159, 10, 0.1), rgba(255, 159, 10, 0.2));
             border-color: var(--warning);
-        }
-
-        .test-area.waiting::before {
-            opacity: 0.1;
+            background: rgba(217, 119, 6, 0.05);
         }
 
         .test-area.signal {
-            background: radial-gradient(circle at center, rgba(48, 209, 88, 0.15), rgba(48, 209, 88, 0.08), rgba(10, 132, 255, 0.05));
             border-color: var(--success);
-            animation: premium-signal-pulse 0.8s ease infinite;
-            box-shadow: 
-                0 0 80px rgba(48, 209, 88, 0.4),
-                0 0 40px rgba(48, 209, 88, 0.6),
-                inset 0 0 30px rgba(48, 209, 88, 0.1);
+            background: rgba(5, 150, 105, 0.1);
         }
 
-        .test-area.signal::before {
-            opacity: 0.3;
-            animation: signal-energy 1.2s ease infinite;
+        .test-area.early {
+            border-color: var(--danger);
+            background: rgba(220, 38, 38, 0.05);
         }
 
-        @keyframes premium-signal-pulse {
-            0%, 100% { 
-                transform: scale(1) rotate(0deg);
-                box-shadow: 
-                    0 0 80px rgba(48, 209, 88, 0.4),
-                    0 0 40px rgba(48, 209, 88, 0.6),
-                    inset 0 0 30px rgba(48, 209, 88, 0.1);
-            }
-            25% { 
-                transform: scale(1.03) rotate(0.5deg);
-                box-shadow: 
-                    0 0 100px rgba(48, 209, 88, 0.5),
-                    0 0 60px rgba(48, 209, 88, 0.7),
-                    inset 0 0 40px rgba(48, 209, 88, 0.15);
-            }
-            50% { 
-                transform: scale(1.05) rotate(-0.5deg);
-                box-shadow: 
-                    0 0 120px rgba(48, 209, 88, 0.6),
-                    0 0 80px rgba(48, 209, 88, 0.8),
-                    inset 0 0 50px rgba(48, 209, 88, 0.2);
-            }
-            75% { 
-                transform: scale(1.03) rotate(0.5deg);
-                box-shadow: 
-                    0 0 100px rgba(48, 209, 88, 0.5),
-                    0 0 60px rgba(48, 209, 88, 0.7),
-                    inset 0 0 40px rgba(48, 209, 88, 0.15);
-            }
+        .instruction {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            color: var(--text-primary);
         }
 
-        @keyframes signal-energy {
-            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.2; }
-            50% { transform: scale(1.2) rotate(180deg); opacity: 0.4; }
+        .reaction-time {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 16px;
         }
 
-        #instruction {
-            font-size: 2.2rem;
-            font-weight: 300;
-            margin-bottom: 35px;
-            transition: all 0.4s var(--transition);
-            letter-spacing: 0.5px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: relative;
+        .performance-indicator {
+            font-size: 16px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: var(--radius);
+            display: inline-block;
         }
 
-        #instruction.highlight {
-            font-size: 2.8rem;
-            font-weight: 600;
-            color: var(--success);
-            text-shadow: 0 0 20px rgba(48, 209, 88, 0.5);
-            animation: text-glow 0.5s ease;
+        .performance-excellent { background: rgba(5, 150, 105, 0.1); color: var(--success); }
+        .performance-good { background: rgba(59, 130, 246, 0.1); color: var(--primary); }
+        .performance-average { background: rgba(217, 119, 6, 0.1); color: var(--warning); }
+        .performance-slow { background: rgba(220, 38, 38, 0.1); color: var(--danger); }
+
+        /* Controls */
+        .control-group {
+            margin-bottom: 20px;
         }
 
-        @keyframes text-glow {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        .signal-indicator {
-            width: 120px;
-            height: 120px;
-            background: conic-gradient(from 0deg, var(--accent), var(--success), var(--warning), var(--danger), var(--accent));
-            border-radius: 50%;
-            display: none;
-            position: relative;
-            animation: premium-rotate-gradient 2s linear infinite;
-            box-shadow: 
-                0 0 60px rgba(10, 132, 255, 0.6),
-                0 0 100px rgba(48, 209, 88, 0.4),
-                inset 0 0 20px rgba(255, 255, 255, 0.1);
-            filter: blur(0.5px);
-        }
-
-        .signal-indicator::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            background: conic-gradient(from 0deg, transparent, var(--accent), transparent, var(--success), transparent);
-            border-radius: 50%;
-            animation: premium-rotate-gradient 3s linear infinite reverse;
-            filter: blur(1px);
-            opacity: 0.3;
-        }
-
-        .signal-indicator::after {
-            content: '';
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            right: 15px;
-            bottom: 15px;
-            background: radial-gradient(circle, var(--bg-primary) 60%, transparent 70%);
-            border-radius: 50%;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
-        }
-
-        @keyframes premium-rotate-gradient {
-            from { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(180deg) scale(1.05); }
-            to { transform: rotate(360deg) scale(1); }
-        }
-
-        .signal-indicator.active {
+        .control-label {
             display: block;
-            animation: premium-rotate-gradient 1.5s linear infinite, signal-appear 0.5s ease;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
         }
 
-        @keyframes signal-appear {
-            from { transform: scale(0) rotate(0deg); opacity: 0; }
-            to { transform: scale(1) rotate(360deg); opacity: 1; }
+        .control-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--background);
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.2s ease;
         }
 
-        /* Stats Grid */
+        .control-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .button {
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 8px;
+        }
+
+        .button-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .button-primary:hover:not(:disabled) {
+            background: var(--primary-hover);
+        }
+
+        .button-primary:disabled {
+            background: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        .button-secondary {
+            background: var(--surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .button-secondary:hover {
+            background: var(--surface-elevated);
+        }
+
+        /* Statistics */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
         }
 
         .stat-card {
-            background: var(--bg-tertiary);
-            padding: 25px;
-            border-radius: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
             text-align: center;
-            border: 1px solid var(--glass-border);
-            transition: all 0.3s var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent), var(--success));
-            transform: scaleX(0);
-            transition: transform 0.3s var(--transition);
-        }
-
-        .stat-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
         }
 
         .stat-value {
-            font-size: 2.5rem;
+            font-size: 24px;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--accent), var(--success));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 5px;
+            color: var(--primary);
+            margin-bottom: 4px;
         }
 
         .stat-label {
-            font-size: 0.9rem;
+            font-size: 12px;
             color: var(--text-secondary);
-            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        /* Results Panel */
-        .results-content {
-            max-height: 500px;
+        /* Results List */
+        .results-list {
+            max-height: 300px;
             overflow-y: auto;
-            padding-right: 10px;
         }
 
-        .results-content::-webkit-scrollbar {
+        .results-list::-webkit-scrollbar {
             width: 6px;
         }
 
-        .results-content::-webkit-scrollbar-track {
-            background: var(--bg-tertiary);
-            border-radius: 3px;
+        .results-list::-webkit-scrollbar-track {
+            background: var(--surface);
         }
 
-        .results-content::-webkit-scrollbar-thumb {
-            background: var(--accent);
+        .results-list::-webkit-scrollbar-thumb {
+            background: var(--border);
             border-radius: 3px;
         }
 
@@ -738,964 +294,229 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 18px;
-            margin-bottom: 12px;
-            background: var(--bg-tertiary);
-            border-radius: 12px;
-            border: 1px solid var(--glass-border);
-            transition: all 0.2s var(--transition);
-            opacity: 0;
-            animation: slide-in-right 0.4s var(--transition) forwards;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
         }
 
-        @keyframes slide-in-right {
-            from {
-                opacity: 0;
-                transform: translateX(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .result-item:hover {
-            transform: translateX(-5px);
-            border-color: var(--accent);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        .result-item:last-child {
+            border-bottom: none;
         }
 
         .result-number {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
+            font-size: 12px;
+            color: var(--text-muted);
         }
 
         .result-time {
-            font-size: 1.2rem;
             font-weight: 600;
-            color: var(--accent);
+            color: var(--text-primary);
         }
 
+        /* Chart */
+        .chart-container {
+            height: 200px;
+            margin-top: 20px;
+        }
+
+        /* Empty State */
         .empty-state {
             text-align: center;
-            color: var(--text-secondary);
-            padding: 60px 20px;
-            font-style: italic;
+            padding: 40px 20px;
+            color: var(--text-muted);
         }
 
-        /* Achievement Notification */
-        .achievement {
-            position: fixed;
-            top: 30px;
-            right: 30px;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 20px 30px;
-            box-shadow: var(--shadow);
-            transform: translateX(400px);
-            transition: transform 0.3s var(--transition);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 15px;
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
         }
 
-        .achievement.show {
-            transform: translateX(0);
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .test-area {
+                padding: 60px 20px;
+                min-height: 300px;
+            }
+            
+            .reaction-time {
+                font-size: 36px;
+            }
         }
 
-        .achievement-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--accent), var(--success));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .test-area {
+                padding: 40px 16px;
+            }
+            
+            .instruction {
+                font-size: 20px;
+            }
+            
+            .reaction-time {
+                font-size: 28px;
+            }
         }
 
-        .achievement-text {
-            display: flex;
-            flex-direction: column;
-        }
+        /* Utilities */
+        .text-center { text-align: center; }
+        .mb-4 { margin-bottom: 16px; }
+        .mt-4 { margin-top: 16px; }
+        .hidden { display: none; }
 
-        .achievement-title {
-            font-weight: 600;
-            font-size: 1rem;
-        }
-
-        .achievement-desc {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        /* Loading Animation */
+        /* Loading State */
         .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--bg-tertiary);
-            border-top-color: var(--accent);
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border);
+            border-top-color: var(--primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            display: none;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-
-        /* Keyboard Shortcuts */
-        .shortcuts {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 15px 20px;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            display: flex;
-            gap: 20px;
-            opacity: 0.7;
-            transition: opacity 0.2s;
-        }
-
-        .shortcuts:hover {
-            opacity: 1;
-        }
-
-        .shortcut {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .key {
-            background: var(--bg-tertiary);
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-family: monospace;
-            color: var(--text-primary);
-            border: 1px solid var(--glass-border);
-        }
-
-        /* Particle Effects */
-        @keyframes particle-burst {
-            0% {
-                transform: translate(0, 0) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(var(--dx), var(--dy)) scale(0);
-                opacity: 0;
-            }
-        }
-
-        @keyframes firework-burst {
-            0% {
-                transform: translate(0, 0) scale(1);
-                opacity: 1;
-            }
-            70% {
-                transform: translate(var(--dx), var(--dy)) scale(1);
-                opacity: 0.8;
-            }
-            100% {
-                transform: translate(var(--dx), calc(var(--dy) + 100px)) scale(0);
-                opacity: 0;
-            }
-        }
-
-        /* Performance Indicator */
-        .performance-ring {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: conic-gradient(from 0deg, var(--success) 0deg, var(--warning) 120deg, var(--danger) 240deg, var(--success) 360deg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-            opacity: 0;
-            transition: all 0.3s ease;
-            transform: scale(0.8);
-        }
-
-        .performance-ring.show {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .performance-ring::before {
-            content: '';
-            position: absolute;
-            top: 4px;
-            left: 4px;
-            right: 4px;
-            bottom: 4px;
-            background: var(--bg-primary);
-            border-radius: 50%;
-            z-index: -1;
-        }
-
-        /* Responsive */
-        @media (max-width: 1400px) {
-            .main-grid {
-                grid-template-columns: 250px 1fr 250px;
-                gap: 15px;
-            }
-            .game-stats { gap: 15px; }
-            .stat-item { padding: 8px 15px; font-size: 1rem; }
-        }
-
-        @media (max-width: 1200px) {
-            .main-grid {
-                grid-template-columns: 1fr;
-                max-width: 800px;
-                margin: 0 auto;
-            }
-            .shortcuts { display: none; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .chart-container { display: none; }
-        }
-
-        @media (max-width: 768px) {
-            header { 
-                flex-direction: column; 
-                gap: 15px; 
-                padding: 15px 20px;
-                margin-bottom: 20px;
-            }
-            .game-stats { order: -1; }
-            .settings-sections { grid-template-columns: 1fr; }
-            .test-area { padding: 40px 20px; }
-            #instruction { font-size: 1.5rem; }
-            #instruction.highlight { font-size: 1.8rem; }
-            .feedback-message { font-size: 1.4rem; padding: 15px 30px; }
-            .glass-panel { padding: 20px; }
-            .results-content { max-height: 300px; }
-        }
-
-        .game-stats {
-            display: flex;
-            gap: 25px;
-            align-items: center;
-        }
-
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--glass);
-            padding: 10px 20px;
-            border-radius: 20px;
-            border: 1px solid var(--glass-border);
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.3s var(--transition);
-        }
-
-        .stat-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .stat-icon {
-            font-size: 1.3rem;
-            animation: icon-bounce 2s ease-in-out infinite;
-        }
-
-        @keyframes icon-bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-3px); }
-        }
-
-        .stat-item.coins { 
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.2));
-            border-color: rgba(255, 215, 0, 0.3);
-        }
-
-        .stat-item.streak { 
-            background: linear-gradient(135deg, rgba(255, 69, 0, 0.1), rgba(255, 69, 0, 0.2));
-            border-color: rgba(255, 69, 0, 0.3);
-        }
-
-        .stat-item.points { 
-            background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(138, 43, 226, 0.2));
-            border-color: rgba(138, 43, 226, 0.3);
-        }
-
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .icon-button {
-            background: transparent;
-            border: none;
-            font-size: 28px;
-            cursor: pointer;
-            color: var(--text-secondary);
-            transition: all 0.2s var(--transition);
-            padding: 5px;
-            border-radius: 10px;
-        }
-
-        .icon-button:hover {
-            color: var(--text-primary);
-            background: var(--bg-tertiary);
-            transform: scale(1.1);
-        }
-
-        /* Overkill Settings Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(15px) saturate(150%);
-            z-index: 2000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s var(--transition);
-        }
-
-        .modal-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal-content {
-            width: 90%;
-            max-width: 900px;
-            max-height: 90vh;
-            overflow-y: auto;
-            transform: scale(0.9) translateY(20px);
-            transition: all 0.4s var(--transition);
-            position: relative;
-        }
-        
-        .modal-overlay.show .modal-content {
-            transform: scale(1) translateY(0);
-        }
-
-        .modal-close-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: var(--bg-tertiary);
-            color: var(--text-secondary);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            font-size: 24px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-close-btn:hover {
-            transform: scale(1.1) rotate(90deg);
-            background: var(--danger);
-            color: white;
-        }
-
-        .settings-sections {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-top: 20px;
-        }
-        
-        .settings-category {
-            margin-bottom: 30px;
-        }
-
-        .settings-category h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 10px;
-        }
-        
-        .setting-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            font-size: 0.95rem;
-        }
-
-        .about-text p {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 5px;
-        }
-
-        /* Custom Switch */
-        .switch-label {
-            position: relative;
-            display: inline-block;
-            width: 54px;
-            height: 30px;
-        }
-
-        .switch-input { display: none; }
-
-        .switch-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: var(--bg-tertiary);
-            transition: .4s;
-            border-radius: 30px;
-            border: 1px solid var(--glass-border);
-        }
-
-        .switch-slider:before {
-            position: absolute;
-            content: "";
-            height: 22px;
-            width: 22px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        .switch-input:checked + .switch-slider {
-            background: linear-gradient(135deg, var(--accent), var(--success));
-        }
-
-        .switch-input:checked + .switch-slider:before {
-            transform: translateX(24px);
-        }
-        
-        /* Custom Range Slider */
-        input[type=range] {
-            -webkit-appearance: none;
-            width: 120px;
-            background: transparent;
-        }
-        input[type=range]::-webkit-slider-runnable-track {
-            width: 100%;
-            height: 6px;
-            cursor: pointer;
-            background: var(--bg-tertiary);
-            border-radius: 3px;
-            border: 1px solid var(--glass-border);
-        }
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            height: 20px;
-            width: 20px;
-            border-radius: 50%;
-            background: var(--accent);
-            cursor: pointer;
-            margin-top: -8px;
-            border: 2px solid white;
-            box-shadow: 0 0 5px rgba(10, 132, 255, 0.5);
-        }
-
-        /* Chart Container */
-        .chart-container {
-            padding: 20px;
-        }
-        .chart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .chart-switcher {
-            display: flex;
-            background: var(--bg-tertiary);
-            border-radius: 12px;
-            padding: 5px;
-        }
-        .chart-switch-btn {
-            padding: 8px 15px;
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            font-weight: 500;
-            border-radius: 9px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .chart-switch-btn.active {
-            background: var(--accent);
-            color: white;
-            box-shadow: 0 2px 8px rgba(10, 132, 255, 0.3);
-        }
-        .chart-wrapper {
-            position: relative;
-            height: 200px; /* Adjust as needed */
-        }
-        .chart-wrapper canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        /* Media Query additions */
-        @media (max-width: 768px) {
-             .settings-sections {
-                grid-template-columns: 1fr;
-            }
-            .chart-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-        }
-
-        /* Gamified Feedback Message */
-        .feedback-message {
-            position: absolute;
-            top: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            padding: 20px 40px;
-            border-radius: 20px;
-            border: 2px solid;
-            font-weight: 800;
-            font-size: 1.8rem;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.5s var(--transition);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            backdrop-filter: blur(20px);
-        }
-
-        .feedback-message.show {
-            animation: feedback-animation 2.5s forwards;
-        }
-
-        @keyframes feedback-animation {
-            0% { 
-                opacity: 0; 
-                transform: translate(-50%, 20px) scale(0.5) rotate(-10deg); 
-                visibility: visible; 
-            }
-            15% { 
-                opacity: 1; 
-                transform: translate(-50%, 0) scale(1.2) rotate(5deg); 
-            }
-            25% { 
-                transform: translate(-50%, 0) scale(1) rotate(0deg); 
-            }
-            85% { 
-                opacity: 1; 
-                transform: translate(-50%, 0) scale(1) rotate(0deg); 
-            }
-            100% { 
-                opacity: 0; 
-                transform: translate(-50%, -20px) scale(0.8) rotate(10deg); 
-                visibility: hidden; 
-            }
-        }
-
-        .feedback-message.god { 
-            color: #ff2d55; 
-            text-shadow: 0 0 30px #ff2d55, 0 0 60px #ff2d55, 0 0 90px #ff2d55;
-            border-color: #ff2d55;
-            animation: feedback-animation 2.5s forwards, pulse-glow 0.5s ease-in-out infinite;
-        }
-        
-        .feedback-message.legend { 
-            color: #ffd700; 
-            text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
-            border-color: #ffd700;
-            animation: feedback-animation 2.5s forwards, pulse-glow 0.6s ease-in-out infinite;
-        }
-        
-        .feedback-message.pro { 
-            color: #00ffff; 
-            text-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff;
-            border-color: #00ffff;
-        }
-        
-        .feedback-message.cheetah { 
-            color: #30d158; 
-            text-shadow: 0 0 20px #30d158, 0 0 40px #30d158;
-            border-color: #30d158;
-        }
-        
-        .feedback-message.slay { 
-            color: #bf5af2;
-            text-shadow: 0 0 15px #bf5af2;
-            border-color: #bf5af2;
-        }
-        
-        .feedback-message.solid { 
-            color: var(--text-primary);
-            border-color: var(--text-primary);
-        }
-        
-        .feedback-message.mid { 
-            color: var(--text-secondary);
-            border-color: var(--text-secondary);
-        }
-        
-        .feedback-message.slow { 
-            color: var(--text-secondary); 
-            opacity: 0.8;
-            border-color: var(--text-secondary);
-        }
-        
-        .feedback-message.snail { 
-            color: var(--text-secondary); 
-            opacity: 0.7;
-            border-color: var(--text-secondary);
-        }
-
-        @keyframes pulse-glow {
-            0%, 100% { transform: translateX(-50%) scale(1); }
-            50% { transform: translateX(-50%) scale(1.05); }
-        }
-
-        /* Coin Animation */
-        .coin-animation {
-            position: fixed;
-            width: 50px;
-            height: 50px;
-            font-size: 40px;
-            z-index: 9999;
-            pointer-events: none;
-            animation: coin-collect 1s ease-out forwards;
-        }
-
-        @keyframes coin-collect {
-            0% {
-                transform: translateY(0) rotate(0deg) scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: translateY(-100px) rotate(360deg) scale(1.5);
-            }
-            100% {
-                transform: translateY(-200px) rotate(720deg) scale(0);
-                opacity: 0;
-            }
-        }
-        
-        /* Particle Effects */
-        @keyframes particle-burst {
-            0% {
-                transform: translate(0, 0) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(var(--dx), var(--dy)) scale(0);
-                opacity: 0;
-            }
-        }
-
-        @keyframes firework-burst {
-            0% {
-                transform: translate(0, 0) scale(1);
-                opacity: 1;
-            }
-            70% {
-                transform: translate(var(--dx), var(--dy)) scale(1);
-                opacity: 0.8;
-            }
-            100% {
-                transform: translate(var(--dx), calc(var(--dy) + 100px)) scale(0);
-                opacity: 0;
-            }
-        }
     </style>
 </head>
 <body>
-    <div class="background-animation"></div>
-    
     <div class="container">
-        <header>
-            <div class="logo-section">
-                <div class="logo">⚡</div>
-                <div>
-                    <h1>Reaktionstest Pro</h1>
-                    <div class="subtitle">Messe deine Reflexe wie ein Profi</div>
-                </div>
-            </div>
-            <div class="game-stats">
-                <div class="stat-item coins">
-                    <span class="stat-icon">🪙</span>
-                    <span id="coinCount">0</span>
-                </div>
-                <div class="stat-item streak">
-                    <span class="stat-icon">🔥</span>
-                    <span id="streakCount">0</span>
-                </div>
-                <div class="stat-item points">
-                    <span class="stat-icon">⭐</span>
-                    <span id="pointsCount">0</span>
-                </div>
+        <header class="header">
+            <div>
+                <h1>Professional Reaction Timer</h1>
+                <p style="color: var(--text-secondary); margin-top: 4px;">Precise reaction time measurement for professionals</p>
             </div>
             <div class="header-controls">
-                <div class="mode-toggle">
-                    <span>🌙</span>
-                    <div class="toggle-switch" onclick="toggleDarkMode()"></div>
-                    <span>☀️</span>
-                </div>
-                <button id="settingsBtn" class="icon-button" onclick="toggleSettingsModal()">⚙️</button>
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <span id="theme-icon">🌙</span> Toggle Theme
+                </button>
             </div>
         </header>
-        
-        <div class="main-grid">
+
+        <div class="main-layout">
             <!-- Settings Panel -->
-            <div class="glass-panel">
-                <div class="panel-title">Einstellungen</div>
+            <div class="panel">
+                <h2 class="panel-title">Settings</h2>
                 
-                <div class="setting-group">
-                    <label class="setting-label">Minimale Wartezeit (ms)</label>
-                    <input type="number" id="minWait" value="1000" min="500" max="10000">
+                <div class="control-group">
+                    <label class="control-label">Min Wait Time (ms)</label>
+                    <input type="number" id="minWait" class="control-input" value="1000" min="500" max="10000">
                 </div>
                 
-                <div class="setting-group">
-                    <label class="setting-label">Maximale Wartezeit (ms)</label>
-                    <input type="number" id="maxWait" value="5000" min="1000" max="15000">
+                <div class="control-group">
+                    <label class="control-label">Max Wait Time (ms)</label>
+                    <input type="number" id="maxWait" class="control-input" value="5000" min="1000" max="15000">
                 </div>
                 
-                <div class="setting-group">
-                    <label class="setting-label">Signal-Typ</label>
-                    <select id="signalType">
-                        <option value="both">🎵 Visuell + Akustisch</option>
-                        <option value="visual">👁 Nur visuell</option>
-                        <option value="audio">🔊 Nur akustisch</option>
+                <div class="control-group">
+                    <label class="control-label">Signal Type</label>
+                    <select id="signalType" class="control-input">
+                        <option value="both">Visual + Audio</option>
+                        <option value="visual">Visual Only</option>
+                        <option value="audio">Audio Only</option>
                     </select>
                 </div>
                 
-                <div class="setting-group">
-                    <label class="setting-label">Reaktions-Taste</label>
-                    <select id="reactionKey">
-                        <option value=" ">Leertaste</option>
-                        <option value="Enter">Enter ⏎</option>
-                        <option value="ArrowUp">Pfeil oben ↑</option>
-                        <option value="ArrowDown">Pfeil unten ↓</option>
-                        <option value="ArrowLeft">Pfeil links ←</option>
-                        <option value="ArrowRight">Pfeil rechts →</option>
+                <div class="control-group">
+                    <label class="control-label">Reaction Key</label>
+                    <select id="reactionKey" class="control-input">
+                        <option value=" ">Spacebar</option>
+                        <option value="Enter">Enter</option>
+                        <option value="ArrowUp">Arrow Up</option>
+                        <option value="ArrowDown">Arrow Down</option>
                     </select>
                 </div>
                 
-                <div class="button-group">
-                    <button id="startBtn" class="primary-button" onclick="startTest()">
-                        Test starten
+                <div class="mt-4">
+                    <button id="startBtn" class="button button-primary" onclick="startTest()">
+                        Start Test
                     </button>
-                    <button class="secondary-button" onclick="resetResults()">
-                        Zurücksetzen
+                    <button class="button button-secondary" onclick="resetResults()">
+                        Reset Results
                     </button>
-                    <button class="secondary-button" onclick="downloadCSV()">
-                        CSV exportieren
-                    </button>
-                    <button class="secondary-button" onclick="downloadJSON()">
-                        JSON exportieren
+                    <button class="button button-secondary" onclick="exportData()">
+                        Export Data
                     </button>
                 </div>
             </div>
             
             <!-- Test Area -->
-            <div class="test-container">
+            <div>
                 <div id="testArea" class="test-area">
-                    <div id="feedbackMessage" class="feedback-message"></div>
-                    <div id="instruction">Bereit für den Start</div>
-                    <div id="signalIndicator" class="signal-indicator"></div>
-                    <div class="loading-spinner" id="loadingSpinner"></div>
+                    <div id="instruction" class="instruction">Ready to start</div>
+                    <div id="reactionTime" class="reaction-time hidden">-</div>
+                    <div id="performanceIndicator" class="performance-indicator hidden">-</div>
+                    <div id="loadingSpinner" class="loading-spinner hidden"></div>
                 </div>
                 
-                <div class="stats-grid">
+                <div class="stats-grid mt-4">
                     <div class="stat-card">
                         <div class="stat-value" id="avgTime">-</div>
-                        <div class="stat-label">Mittelwert (ms)</div>
+                        <div class="stat-label">Average</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-value" id="medianTime">-</div>
-                        <div class="stat-label">Median (ms)</div>
+                        <div class="stat-label">Median</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-value" id="bestTime">-</div>
-                        <div class="stat-label">Bestzeit (ms)</div>
+                        <div class="stat-label">Best Time</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-value" id="testCount">0</div>
-                        <div class="stat-label">Anzahl Tests</div>
+                        <div class="stat-label">Tests</div>
                     </div>
                 </div>
-                
-                <div class="chart-container glass-panel">
-                    <div class="chart-header">
-                        <div class="panel-title">Analyse</div>
-                        <div class="chart-switcher">
-                            <button class="chart-switch-btn active" data-chart="history">Verlauf</button>
-                            <button class="chart-switch-btn" data-chart="distribution">Verteilung</button>
-                            <button class="chart-switch-btn" data-chart="scatter">Streuung</button>
-                        </div>
-                    </div>
-                    <div class="chart-wrapper">
+
+                <div class="panel mt-4">
+                    <h3 class="panel-title">Performance Chart</h3>
+                    <div class="chart-container">
                         <canvas id="chartCanvas"></canvas>
-                        <canvas id="distributionCanvas" style="display: none;"></canvas>
-                        <canvas id="scatterCanvas" style="display: none;"></canvas>
                     </div>
                 </div>
             </div>
             
             <!-- Results Panel -->
-            <div class="glass-panel">
-                <div class="panel-title">Ergebnisse</div>
-                <div id="resultsList" class="results-content">
+            <div class="panel">
+                <h2 class="panel-title">Recent Results</h2>
+                <div id="resultsList" class="results-list">
                     <div class="empty-state">
-                        <div style="font-size: 3rem; margin-bottom: 10px;">📊</div>
-                        <div>Noch keine Messungen</div>
-                        <div style="font-size: 0.9rem; margin-top: 5px;">Starte deinen ersten Test!</div>
+                        <div class="empty-state-icon">📊</div>
+                        <div>No measurements yet</div>
+                        <div style="font-size: 14px; margin-top: 8px;">Start your first test</div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    
-    <!-- Overkill Settings Modal -->
-    <div id="settingsModal" class="modal-overlay">
-        <div class="glass-panel modal-content">
-            <button class="modal-close-btn" onclick="toggleSettingsModal()">×</button>
-            <div class="panel-title">Settings</div>
-            
-            <div class="settings-sections">
-                <!-- Left Column -->
-                <div class="settings-column">
-                    <div class="settings-category">
-                        <h3>🎨 Visuals & Effects</h3>
-                        <div class="setting-item">
-                            <label for="setting-bg-animation">Background Animation</label>
-                            <label class="switch-label"><input type="checkbox" id="setting-bg-animation" class="switch-input" data-setting="bgAnimation" checked><span class="switch-slider"></span></label>
-                        </div>
-                        <div class="setting-item">
-                            <label for="setting-particles">Floating Particles</label>
-                            <label class="switch-label"><input type="checkbox" id="setting-particles" class="switch-input" data-setting="particles" checked><span class="switch-slider"></span></label>
-                        </div>
-                         <div class="setting-item">
-                            <label for="setting-celebration">Success Effects</label>
-                            <label class="switch-label"><input type="checkbox" id="setting-celebration" class="switch-input" data-setting="celebration" checked><span class="switch-slider"></span></label>
-                        </div>
-                        <div class="setting-item">
-                            <label for="setting-bg-opacity">BG Opacity</label>
-                            <input type="range" id="setting-bg-opacity" min="0" max="0.2" step="0.01" data-setting="bgOpacity">
-                        </div>
-                    </div>
-                    <div class="settings-category">
-                        <h3>🎵 Audio</h3>
-                        <div class="setting-item">
-                            <label for="setting-master-volume">Master Volume</label>
-                            <input type="range" id="setting-master-volume" min="0" max="1" step="0.05" data-setting="masterVolume">
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Right Column -->
-                <div class="settings-column">
-                    <div class="settings-category">
-                        <h3>📊 Data Visualization</h3>
-                         <div class="setting-item">
-                            <label for="setting-chart-smoothing">Chart Smoothing</label>
-                            <input type="range" id="setting-chart-smoothing" min="0" max="1" step="0.1" data-setting="chartTension">
-                        </div>
-                    </div>
-                    <div class="settings-category">
-                        <h3>ℹ️ About</h3>
-                        <div class="about-text">
-                            <p>Created with ⚡ by <strong>uka löhr</strong></p>
-                            <p>&copy; 2025 Reaktionstest Pro. All rights reserved.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Achievement Notification -->
-    <div id="achievement" class="achievement">
-        <div class="achievement-icon">🏆</div>
-        <div class="achievement-text">
-            <div class="achievement-title" id="achievementTitle">Achievement Unlocked!</div>
-            <div class="achievement-desc" id="achievementDesc">Description</div>
-        </div>
-    </div>
-    
-    <!-- Keyboard Shortcuts -->
-    <div class="shortcuts">
-        <div class="shortcut">
-            <span class="key">S</span>
-            <span>Start</span>
-        </div>
-        <div class="shortcut">
-            <span class="key">R</span>
-            <span>Reset</span>
-        </div>
-        <div class="shortcut">
-            <span class="key">D</span>
-            <span>Download</span>
-        </div>
-        <div class="shortcut">
-            <span class="key">T</span>
-            <span>Theme</span>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Global Variables
         let testState = 'idle';
         let waitTimeout;
         let signalTime;
-        let results = JSON.parse(localStorage.getItem('reactionTestResults')) || [];
+        let results = JSON.parse(localStorage.getItem('reactionResults')) || [];
         let audioContext;
-        let sounds = {};
-        let chart, distributionChart, scatterChart;
-        let settings = JSON.parse(localStorage.getItem('reactionTestSettings')) || {};
-        let overkillSettings = JSON.parse(localStorage.getItem('overkillSettings')) || {
-            bgAnimation: true,
-            particles: true,
-            celebration: true,
-            bgOpacity: 0.08,
-            masterVolume: 1,
-            chartTension: 0.4
-        };
-        let gameStats = JSON.parse(localStorage.getItem('gameStats')) || {
-            coins: 0,
-            streak: 0,
-            points: 0,
-            bestStreak: 0
-        };
+        let chart;
+        let settings = JSON.parse(localStorage.getItem('reactionSettings')) || {};
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
@@ -1703,59 +524,44 @@
             loadSettings();
             updateStatistics();
             updateResultsList();
-            initCharts();
+            initChart();
             setupKeyboardShortcuts();
-            checkAchievements();
-            applyOverkillSettings();
-            setupOverkillSettingsListeners();
-            setupChartSwitcher();
-            updateGameStats();
+            setupEventListeners();
         });
 
         // Audio System
         function initAudio() {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            
-            // Preload sounds
-            sounds.ready = createSound(400, 'sine', 0.1, 0.2);
-            sounds.signal = createSound(1000, 'sine', 0.3, 0.3);
-            sounds.success = createSound([523, 659, 784], 'sine', 0.2, 0.15);
-            sounds.fail = createSound([300, 250], 'sawtooth', 0.2, 0.2);
-            sounds.achievement = createSound([523, 659, 784, 1047], 'sine', 0.3, 0.2);
-            sounds.coin = createSound([880, 1047], 'sine', 0.15, 0.1);
-            sounds.levelup = createSound([523, 659, 784, 1047, 1319], 'sine', 0.25, 0.15);
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (e) {
+                console.warn('Audio not supported');
+            }
         }
 
-        function createSound(frequencies, type, volume, duration) {
-            return () => {
-                if (!audioContext) return;
-                const masterVolume = overkillSettings.masterVolume || 1;
-                const freqArray = Array.isArray(frequencies) ? frequencies : [frequencies];
-                freqArray.forEach((freq, index) => {
-                    setTimeout(() => {
-                        const oscillator = audioContext.createOscillator();
-                        const gainNode = audioContext.createGain();
-                        
-                        oscillator.connect(gainNode);
-                        gainNode.connect(audioContext.destination);
-                        
-                        oscillator.frequency.value = freq;
-                        oscillator.type = type;
-                        
-                        gainNode.gain.setValueAtTime(volume * masterVolume, audioContext.currentTime);
-                        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
-                        
-                        oscillator.start(audioContext.currentTime);
-                        oscillator.stop(audioContext.currentTime + duration);
-                    }, index * 100);
-                });
-            };
+        function playTone(frequency, duration, volume = 0.3) {
+            if (!audioContext) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = frequency;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
         }
 
         // Settings Management
         function loadSettings() {
-            if (settings.theme === 'light') {
-                document.body.classList.add('light-mode');
+            if (settings.theme === 'dark') {
+                document.body.classList.add('dark');
+                document.getElementById('theme-icon').textContent = '☀️';
             }
             
             if (settings.minWait) document.getElementById('minWait').value = settings.minWait;
@@ -1766,20 +572,20 @@
 
         function saveSettings() {
             settings = {
-                theme: document.body.classList.contains('light-mode') ? 'light' : 'dark',
+                theme: document.body.classList.contains('dark') ? 'dark' : 'light',
                 minWait: document.getElementById('minWait').value,
                 maxWait: document.getElementById('maxWait').value,
                 signalType: document.getElementById('signalType').value,
                 reactionKey: document.getElementById('reactionKey').value
             };
-            localStorage.setItem('reactionTestSettings', JSON.stringify(settings));
+            localStorage.setItem('reactionSettings', JSON.stringify(settings));
         }
 
-        // Theme Toggle
-        function toggleDarkMode() {
-            document.body.classList.toggle('light-mode');
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            const icon = document.getElementById('theme-icon');
+            icon.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
             saveSettings();
-            sounds.ready();
         }
 
         // Test Functions
@@ -1790,15 +596,13 @@
             const maxWait = parseInt(document.getElementById('maxWait').value);
             
             if (minWait >= maxWait) {
-                showNotification('⚠️', 'Fehler', 'Min. Wartezeit muss kleiner als Max. sein');
-                sounds.fail();
+                alert('Minimum wait time must be less than maximum wait time');
                 return;
             }
             
             saveSettings();
             testState = 'waiting';
             updateUI();
-            sounds.ready();
             
             const waitTime = Math.random() * (maxWait - minWait) + minWait;
             
@@ -1812,22 +616,13 @@
             signalTime = performance.now();
             
             const signalType = document.getElementById('signalType').value;
-            const testArea = document.getElementById('testArea');
-            const signalIndicator = document.getElementById('signalIndicator');
-            const instruction = document.getElementById('instruction');
             
             if (signalType === 'visual' || signalType === 'both') {
-                testArea.classList.add('signal');
-                signalIndicator.classList.add('active');
-                instruction.classList.add('highlight');
+                document.getElementById('testArea').classList.add('signal');
             }
             
             if (signalType === 'audio' || signalType === 'both') {
-                sounds.signal();
-                // Add haptic feedback if available
-                if (navigator.vibrate) {
-                    navigator.vibrate([50, 30, 50]);
-                }
+                playTone(1000, 0.2);
             }
             
             updateUI();
@@ -1838,198 +633,95 @@
                 const reactionTime = Math.round(performance.now() - signalTime);
                 recordResult(reactionTime);
                 resetTest();
-                sounds.success();
             } else if (testState === 'waiting') {
                 clearTimeout(waitTimeout);
                 showEarlyPress();
-                sounds.fail();
             }
         }
 
         function showEarlyPress() {
-            testState = 'idle';
-            document.getElementById('testArea').classList.remove('waiting');
-            document.getElementById('instruction').textContent = '⚠️ Zu früh! Warte auf das Signal.';
-            document.getElementById('startBtn').disabled = false;
+            testState = 'early';
+            document.getElementById('testArea').classList.add('early');
+            document.getElementById('instruction').textContent = 'Too early! Wait for the signal.';
             
             setTimeout(() => {
-                if (testState === 'idle') {
-                    updateUI();
-                }
+                resetTest();
             }, 2000);
         }
 
         function recordResult(time) {
             const result = {
                 time: time,
-                timestamp: new Date().toISOString(), // Use ISO string for consistency
+                timestamp: new Date().toISOString(),
                 id: Date.now()
             };
             
             results.push(result);
-            localStorage.setItem('reactionTestResults', JSON.stringify(results));
+            localStorage.setItem('reactionResults', JSON.stringify(results));
             
-            // Show new gamified feedback
-            showGamifiedFeedback(time);
+            // Show result
+            document.getElementById('reactionTime').textContent = time + 'ms';
+            document.getElementById('reactionTime').classList.remove('hidden');
             
-            // Add celebration effects for good times
-            if (time < 200 && overkillSettings.celebration) {
-                createCelebrationEffect();
-                if (navigator.vibrate) {
-                    navigator.vibrate([100, 50, 100, 50, 200]);
-                }
-            }
+            const indicator = document.getElementById('performanceIndicator');
+            const performance = getPerformanceLevel(time);
+            indicator.textContent = performance.label;
+            indicator.className = `performance-indicator ${performance.class}`;
+            indicator.classList.remove('hidden');
             
             updateStatistics();
             updateResultsList();
-            updateAllCharts();
-            checkAchievements();
+            updateChart();
             
-            // Check for personal best
-            const times = results.map(r => r.time);
-            if (time === Math.min(...times) && overkillSettings.celebration) {
-                showNotification('🎉', 'Neue Bestzeit!', `${time}ms - Fantastisch!`);
-                sounds.achievement();
-            }
-        }
-
-        function getGamifiedFeedback(time) {
-            if (time < 120) return { tier: 'god', message: "GÖTTLICH!", coins: 50, points: 500 };
-            if (time < 180) return { tier: 'legend', message: "LEGENDÄR!", coins: 30, points: 300 };
-            if (time < 220) return { tier: 'pro', message: "PROFI!", coins: 20, points: 200 };
-            if (time < 250) return { tier: 'cheetah', message: "GEPARD ODER CHEATER? 😉", coins: 15, points: 150 };
-            if (time < 300) return { tier: 'slay', message: "KRASS!", coins: 10, points: 100 };
-            if (time < 400) return { tier: 'solid', message: "SOLIDE!", coins: 5, points: 50 };
-            if (time < 600) return { tier: 'mid', message: "GEHT SO...", coins: 2, points: 20 };
-            if (time < 1000) return { tier: 'slow', message: "BISSCHEN LANGSAM", coins: 1, points: 10 };
-            return { tier: 'snail', message: "EINGESCHLAFEN? 🐌", coins: 0, points: 5 };
-        }
-
-        function showGamifiedFeedback(time) {
-            const feedback = getGamifiedFeedback(time);
-            const messageEl = document.getElementById('feedbackMessage');
-            
-            messageEl.textContent = feedback.message;
-            messageEl.className = `feedback-message show ${feedback.tier}`;
-
-            // Reset animation
-            messageEl.style.animation = 'none';
-            messageEl.offsetHeight; /* trigger reflow */
-            messageEl.style.animation = null;
-
-            // Update streak
-            if (time < 250) {
-                gameStats.streak++;
-                if (gameStats.streak > gameStats.bestStreak) {
-                    gameStats.bestStreak = gameStats.streak;
-                }
-            } else {
-                gameStats.streak = 0;
-            }
-
-            // Award coins and points
-            gameStats.coins += feedback.coins;
-            gameStats.points += feedback.points;
-
-            // Streak bonus
-            if (gameStats.streak > 0) {
-                const streakBonus = gameStats.streak * 2;
-                gameStats.coins += streakBonus;
-                gameStats.points += streakBonus * 10;
-            }
-
-            // Save and update display
-            localStorage.setItem('gameStats', JSON.stringify(gameStats));
-            updateGameStats();
-
-            // Coin animation
-            if (feedback.coins > 0) {
-                createCoinAnimation(feedback.coins);
-                sounds.coin();
-            }
-
-            // Special effects for high performance
-            if (feedback.tier === 'god' || feedback.tier === 'legend') {
-                sounds.levelup();
-            }
-
             setTimeout(() => {
-                messageEl.classList.remove('show');
-            }, 2500);
+                document.getElementById('reactionTime').classList.add('hidden');
+                document.getElementById('performanceIndicator').classList.add('hidden');
+            }, 3000);
         }
 
-        function createCelebrationEffect() {
-            const colors = ['#0a84ff', '#30d158', '#ff9f0a', '#ff453a'];
-            for (let i = 0; i < 20; i++) {
-                setTimeout(() => {
-                    const particle = document.createElement('div');
-                    particle.style.cssText = `
-                        position: fixed;
-                        width: 8px;
-                        height: 8px;
-                        background: ${colors[Math.floor(Math.random() * colors.length)]};
-                        border-radius: 50%;
-                        pointer-events: none;
-                        z-index: 9999;
-                        left: ${window.innerWidth / 2}px;
-                        top: ${window.innerHeight / 2}px;
-                        animation: particle-burst 1s ease-out forwards;
-                    `;
-                    
-                    const angle = (Math.PI * 2 * i) / 20;
-                    const velocity = 100 + Math.random() * 100;
-                    particle.style.setProperty('--dx', Math.cos(angle) * velocity + 'px');
-                    particle.style.setProperty('--dy', Math.sin(angle) * velocity + 'px');
-                    
-                    document.body.appendChild(particle);
-                    setTimeout(() => particle.remove(), 1000);
-                }, i * 20);
+        function getPerformanceLevel(time) {
+            if (time < 200) return { label: 'Excellent', class: 'performance-excellent' };
+            if (time < 300) return { label: 'Good', class: 'performance-good' };
+            if (time < 500) return { label: 'Average', class: 'performance-average' };
+            return { label: 'Slow', class: 'performance-slow' };
+        }
+
+        function resetTest() {
+            testState = 'idle';
+            document.getElementById('testArea').className = 'test-area';
+            updateUI();
+        }
+
+        function updateUI() {
+            const instruction = document.getElementById('instruction');
+            const startBtn = document.getElementById('startBtn');
+            const spinner = document.getElementById('loadingSpinner');
+            const reactionKey = document.getElementById('reactionKey');
+            const keyName = reactionKey.options[reactionKey.selectedIndex].text;
+            
+            switch (testState) {
+                case 'idle':
+                    instruction.textContent = 'Ready to start';
+                    startBtn.disabled = false;
+                    spinner.classList.add('hidden');
+                    break;
+                case 'waiting':
+                    instruction.textContent = 'Wait for the signal...';
+                    startBtn.disabled = true;
+                    spinner.classList.remove('hidden');
+                    break;
+                case 'signal':
+                    instruction.textContent = `React now! Press ${keyName}`;
+                    spinner.classList.add('hidden');
+                    break;
+                case 'early':
+                    startBtn.disabled = false;
+                    spinner.classList.add('hidden');
+                    break;
             }
         }
 
-        function createCoinAnimation(amount) {
-            const testArea = document.getElementById('testArea');
-            const rect = testArea.getBoundingClientRect();
-            const coinTarget = document.getElementById('coinCount').getBoundingClientRect();
-            
-            for (let i = 0; i < Math.min(amount, 10); i++) {
-                setTimeout(() => {
-                    const coin = document.createElement('div');
-                    coin.className = 'coin-animation';
-                    coin.textContent = '🪙';
-                    coin.style.left = rect.left + rect.width / 2 - 25 + 'px';
-                    coin.style.top = rect.top + rect.height / 2 - 25 + 'px';
-                    
-                    document.body.appendChild(coin);
-                    
-                    // Animate to coin counter
-                    setTimeout(() => {
-                        coin.style.transition = 'all 0.8s cubic-bezier(0.5, 0, 0.5, 1)';
-                        coin.style.left = coinTarget.left + 'px';
-                        coin.style.top = coinTarget.top + 'px';
-                        coin.style.transform = 'scale(0)';
-                    }, 50);
-                    
-                    setTimeout(() => coin.remove(), 1000);
-                }, i * 100);
-            }
-        }
-
-        function updateGameStats() {
-            document.getElementById('coinCount').textContent = gameStats.coins.toLocaleString();
-            document.getElementById('streakCount').textContent = gameStats.streak;
-            document.getElementById('pointsCount').textContent = gameStats.points.toLocaleString();
-            
-            // Animate stat updates
-            ['coinCount', 'streakCount', 'pointsCount'].forEach(id => {
-                const el = document.getElementById(id);
-                el.style.transform = 'scale(1.2)';
-                setTimeout(() => {
-                    el.style.transform = 'scale(1)';
-                }, 200);
-            });
-        }
-
+        // Statistics
         function calculateStatistics() {
             if (results.length === 0) return { avg: 0, median: 0, best: 0 };
             
@@ -2049,18 +741,10 @@
         function updateStatistics() {
             const stats = calculateStatistics();
             
-            document.getElementById('avgTime').textContent = results.length > 0 ? Math.round(stats.avg) : '-';
-            document.getElementById('medianTime').textContent = results.length > 0 ? Math.round(stats.median) : '-';
-            document.getElementById('bestTime').textContent = results.length > 0 ? Math.round(stats.best) : '-';
+            document.getElementById('avgTime').textContent = results.length > 0 ? Math.round(stats.avg) + 'ms' : '-';
+            document.getElementById('medianTime').textContent = results.length > 0 ? Math.round(stats.median) + 'ms' : '-';
+            document.getElementById('bestTime').textContent = results.length > 0 ? Math.round(stats.best) + 'ms' : '-';
             document.getElementById('testCount').textContent = results.length;
-            
-            // Animate stat updates
-            document.querySelectorAll('.stat-value').forEach(el => {
-                el.style.transform = 'scale(1.1)';
-                setTimeout(() => {
-                    el.style.transform = 'scale(1)';
-                }, 200);
-            });
         }
 
         function updateResultsList() {
@@ -2069,361 +753,150 @@
             if (results.length === 0) {
                 list.innerHTML = `
                     <div class="empty-state">
-                        <div style="font-size: 3rem; margin-bottom: 10px;">📊</div>
-                        <div>Noch keine Messungen</div>
-                        <div style="font-size: 0.9rem; margin-top: 5px;">Starte deinen ersten Test!</div>
+                        <div class="empty-state-icon">📊</div>
+                        <div>No measurements yet</div>
+                        <div style="font-size: 14px; margin-top: 8px;">Start your first test</div>
                     </div>
                 `;
                 return;
             }
             
             list.innerHTML = results
-                .slice(-20)
+                .slice(-10)
                 .reverse()
                 .map((result, index) => 
-                    `<div class="result-item" style="animation-delay: ${index * 0.05}s">
-                        <span class="result-number">Test ${results.length - index}</span>
+                    `<div class="result-item">
+                        <span class="result-number">#${results.length - index}</span>
                         <span class="result-time">${result.time}ms</span>
                     </div>`
                 ).join('');
         }
 
-        function updateUI() {
-            const instruction = document.getElementById('instruction');
-            const startBtn = document.getElementById('startBtn');
-            const testArea = document.getElementById('testArea');
-            const reactionKey = document.getElementById('reactionKey');
-            const keyName = reactionKey.options[reactionKey.selectedIndex].text;
-            const loadingSpinner = document.getElementById('loadingSpinner');
-            
-            switch (testState) {
-                case 'idle':
-                    instruction.textContent = 'Bereit für den Start';
-                    startBtn.disabled = false;
-                    testArea.className = 'test-area';
-                    loadingSpinner.style.display = 'none';
-                    break;
-                case 'waiting':
-                    instruction.textContent = 'Warte auf das Signal...';
-                    startBtn.disabled = true;
-                    testArea.className = 'test-area waiting';
-                    loadingSpinner.style.display = 'block';
-                    break;
-                case 'signal':
-                    instruction.textContent = `JETZT! ${keyName}`;
-                    loadingSpinner.style.display = 'none';
-                    break;
-            }
-        }
-
-        function resetTest() {
-            testState = 'idle';
-            document.getElementById('testArea').classList.remove('waiting', 'signal');
-            document.getElementById('signalIndicator').classList.remove('active');
-            document.getElementById('instruction').classList.remove('highlight');
-            updateUI();
-        }
-
         function resetResults() {
-            if (results.length > 0 && !confirm('Wirklich alle Ergebnisse löschen?')) {
+            if (results.length > 0 && !confirm('Are you sure you want to delete all results?')) {
                 return;
             }
             
             results = [];
-            localStorage.removeItem('reactionTestResults');
+            localStorage.removeItem('reactionResults');
             updateStatistics();
             updateResultsList();
-            updateAllCharts();
-            sounds.ready();
+            updateChart();
         }
 
         // Chart
-        function initCharts() {
-            const historyCtx = document.getElementById('chartCanvas').getContext('2d');
-            chart = new Chart(historyCtx, {
+        function initChart() {
+            const ctx = document.getElementById('chartCanvas').getContext('2d');
+            chart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: [],
                     datasets: [{
-                        label: 'Reaktionszeit',
+                        label: 'Reaction Time (ms)',
                         data: [],
-                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--accent'),
-                        backgroundColor: 'rgba(10, 132, 255, 0.1)',
-                        tension: overkillSettings.chartTension,
-                        fill: true
+                        borderColor: '#2563eb',
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true, title: { display: true, text: 'Zeit (ms)' } } }
-                }
-            });
-
-            const distributionCtx = document.getElementById('distributionCanvas').getContext('2d');
-            distributionChart = new Chart(distributionCtx, {
-                type: 'bar',
-                data: { labels: [], datasets: [{ label: 'Anzahl', data: [], backgroundColor: 'rgba(48, 209, 88, 0.5)' }] },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
+                    plugins: {
+                        legend: { display: false }
+                    },
                     scales: {
-                        x: { title: { display: true, text: 'Reaktionszeit Bins (ms)' } },
-                        y: { beginAtZero: true, title: { display: true, text: 'Anzahl der Tests' } }
-                    }
-                }
-            });
-
-            const scatterCtx = document.getElementById('scatterCanvas').getContext('2d');
-            scatterChart = new Chart(scatterCtx, {
-                type: 'scatter',
-                data: {
-                    datasets: [{
-                        label: 'Alle Messungen',
-                        data: [],
-                        backgroundColor: 'rgba(255, 159, 10, 0.7)'
-                    }]
-                },
-                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { type: 'linear', position: 'bottom', title: { display: true, text: 'Test Nummer' } },
-                        y: { title: { display: true, text: 'Reaktionszeit (ms)' } }
-                    }
-                }
-            });
-            
-            updateAllCharts();
-        }
-
-        function updateAllCharts() {
-            if (!chart || results.length === 0) {
-                document.querySelector('.chart-container').style.display = 'none';
-                return;
-            }
-            document.querySelector('.chart-container').style.display = 'block';
-
-            // History Chart
-            const last20 = results.slice(-20);
-            chart.data.labels = last20.map((_, i) => `Test ${results.length - last20.length + 1 + i}`);
-            chart.data.datasets[0].data = last20.map(r => r.time);
-            chart.update();
-            
-            // Distribution Chart
-            const times = results.map(r => r.time);
-            const minTime = Math.min(...times);
-            const maxTime = Math.max(...times);
-            const binSize = 25;
-            const startBin = Math.floor(minTime / binSize) * binSize;
-            const endBin = Math.ceil(maxTime / binSize) * binSize;
-            const bins = {};
-            for (let i = startBin; i <= endBin; i += binSize) {
-                bins[i] = 0;
-            }
-            times.forEach(time => {
-                const bin = Math.floor(time / binSize) * binSize;
-                if(bins[bin] !== undefined) bins[bin]++;
-            });
-            distributionChart.data.labels = Object.keys(bins).map(key => `${key}-${parseInt(key)+binSize}`);
-            distributionChart.data.datasets[0].data = Object.values(bins);
-            distributionChart.update();
-
-            // Scatter Chart
-            scatterChart.data.datasets[0].data = results.map((r, i) => ({x: i + 1, y: r.time}));
-            scatterChart.update();
-        }
-        
-        function setupChartSwitcher() {
-            const switcher = document.querySelector('.chart-switcher');
-            const buttons = switcher.querySelectorAll('.chart-switch-btn');
-            const canvases = document.querySelector('.chart-wrapper').querySelectorAll('canvas');
-
-            switcher.addEventListener('click', (e) => {
-                if (!e.target.matches('.chart-switch-btn')) return;
-
-                const targetChart = e.target.dataset.chart;
-
-                buttons.forEach(btn => btn.classList.remove('active'));
-                e.target.classList.add('active');
-
-                canvases.forEach(canvas => {
-                    canvas.style.display = canvas.id.startsWith(targetChart) ? 'block' : 'none';
-                });
-            });
-        }
-
-        // Overkill Engine
-        function toggleSettingsModal() {
-            const modal = document.getElementById('settingsModal');
-            modal.classList.toggle('show');
-        }
-
-        function applyOverkillSettings() {
-             // Apply settings from the overkillSettings object
-            document.documentElement.style.setProperty('--bg-opacity', overkillSettings.bgOpacity);
-            document.body.classList.toggle('no-bg-animation', !overkillSettings.bgAnimation);
-            document.body.classList.toggle('no-particles', !overkillSettings.particles);
-
-            // Update UI controls
-            document.getElementById('setting-bg-animation').checked = overkillSettings.bgAnimation;
-            document.getElementById('setting-particles').checked = overkillSettings.particles;
-            document.getElementById('setting-celebration').checked = overkillSettings.celebration;
-            document.getElementById('setting-bg-opacity').value = overkillSettings.bgOpacity;
-            document.getElementById('setting-master-volume').value = overkillSettings.masterVolume;
-            document.getElementById('setting-chart-smoothing').value = overkillSettings.chartTension;
-        }
-
-        function setupOverkillSettingsListeners() {
-            document.querySelectorAll('#settingsModal [data-setting]').forEach(element => {
-                const setting = element.dataset.setting;
-                const eventType = (element.type === 'checkbox') ? 'change' : 'input';
-
-                element.addEventListener(eventType, (e) => {
-                    const value = (e.target.type === 'checkbox') ? e.target.checked : e.target.value;
-                    overkillSettings[setting] = value;
-                    
-                    // Live apply
-                    if(setting === 'bgOpacity') {
-                        document.documentElement.style.setProperty('--bg-opacity', value);
-                    } else if (setting === 'bgAnimation') {
-                        document.body.classList.toggle('no-bg-animation', !value);
-                    } else if (setting === 'particles') {
-                        document.body.classList.toggle('no-particles', !value);
-                    } else if(setting === 'chartTension') {
-                        chart.options.animation = false; // prevent re-animation on drag
-                        chart.data.datasets[0].tension = value;
-                        chart.update();
-                    }
-                    
-                    localStorage.setItem('overkillSettings', JSON.stringify(overkillSettings));
-                });
-            });
-        }
-
-        // Achievements
-        function checkAchievements() {
-            const achievements = [
-                { count: 1, title: 'Erster Test', desc: 'Willkommen beim Reaktionstest!' },
-                { count: 10, title: 'Aufwärmphase', desc: '10 Tests abgeschlossen' },
-                { count: 50, title: 'Reaktions-Veteran', desc: '50 Tests gemeistert' },
-                { count: 100, title: 'Reflex-Meister', desc: '100 Tests - Beeindruckend!' },
-                { time: 200, title: 'Blitzschnell', desc: 'Unter 200ms reagiert!' },
-                { time: 150, title: 'Übermenschlich', desc: 'Unter 150ms - Wahnsinn!' }
-            ];
-            
-            achievements.forEach(achievement => {
-                if (achievement.count && results.length === achievement.count) {
-                    showNotification('🏆', achievement.title, achievement.desc);
-                    if (overkillSettings.masterVolume > 0) sounds.achievement();
-                }
-                
-                if (achievement.time && results.length > 0) {
-                    const lastTime = results[results.length - 1].time;
-                    if (lastTime < achievement.time) {
-                        const key = `achievement_time_${achievement.time}`;
-                        if (!localStorage.getItem(key)) {
-                            localStorage.setItem(key, 'true');
-                            showNotification('🏆', achievement.title, achievement.desc);
-                            if (overkillSettings.masterVolume > 0) sounds.achievement();
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Time (ms)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Test Number'
+                            }
                         }
                     }
                 }
             });
+            
+            updateChart();
         }
 
-        function showNotification(icon, title, desc) {
-            const notification = document.getElementById('achievement');
-            document.getElementById('achievementTitle').textContent = title;
-            document.getElementById('achievementDesc').textContent = desc;
-            document.querySelector('.achievement-icon').textContent = icon;
+        function updateChart() {
+            if (!chart || results.length === 0) return;
             
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 4000);
+            const last20 = results.slice(-20);
+            chart.data.labels = last20.map((_, i) => results.length - last20.length + 1 + i);
+            chart.data.datasets[0].data = last20.map(r => r.time);
+            chart.update();
         }
 
-        // Export Functions
-        function downloadCSV() {
+        // Export
+        function exportData() {
             if (results.length === 0) {
-                showNotification('📋', 'Keine Daten', 'Keine Ergebnisse zum Exportieren');
-                sounds.fail();
+                alert('No data to export');
                 return;
             }
             
             const stats = calculateStatistics();
-            const date = new Date(results[results.length - 1].timestamp);
-            
             const csvContent = [
-                'REAKTIONSTEST PRO - ERGEBNISSE',
+                'Professional Reaction Timer - Results',
                 '',
-                `Exportiert am,${date.toLocaleString('de-DE')}`,
-                `Anzahl Tests,${results.length}`,
-                `Mittelwert (ms),${Math.round(stats.avg)}`,
+                `Export Date,${new Date().toISOString()}`,
+                `Total Tests,${results.length}`,
+                `Average (ms),${Math.round(stats.avg)}`,
                 `Median (ms),${Math.round(stats.median)}`,
-                `Bestzeit (ms),${Math.round(stats.best)}`,
+                `Best Time (ms),${Math.round(stats.best)}`,
                 '',
-                'DETAILLIERTE MESSWERTE',
-                'Test Nr,Reaktionszeit (ms),Datum,Uhrzeit',
-                ...results.map((result, index) => {
-                    const d = new Date(result.timestamp);
-                    return `${index + 1},${result.time},${d.toLocaleDateString('de-DE')},${d.toLocaleTimeString('de-DE')}`
-                })
+                'Test Number,Reaction Time (ms),Timestamp',
+                ...results.map((result, index) => 
+                    `${index + 1},${result.time},${result.timestamp}`
+                )
             ].join('\n');
             
-            downloadFile(csvContent, `reaktionstest_pro_${date.toISOString().slice(0,10)}.csv`, 'text/csv');
-            showNotification('✅', 'Export erfolgreich', 'CSV-Datei wurde heruntergeladen');
-            sounds.success();
-        }
-
-        function downloadJSON() {
-            if (results.length === 0) {
-                showNotification('📋', 'Keine Daten', 'Keine Ergebnisse zum Exportieren');
-                sounds.fail();
-                return;
-            }
-            
-            const stats = calculateStatistics();
-            const exportData = {
-                metadata: {
-                    app: 'Reaktionstest Pro',
-                    exportDate: new Date().toISOString(),
-                    totalTests: results.length,
-                    statistics: {
-                        average: Math.round(stats.avg),
-                        median: Math.round(stats.median),
-                        best: Math.round(stats.best)
-                    }
-                },
-                results: results.map(r => ({ ...r, timestamp: new Date(r.timestamp) }))
-            };
-            
-            const jsonContent = JSON.stringify(exportData, null, 2);
-            downloadFile(jsonContent, `reaktionstest_pro_${new Date().toISOString().slice(0,10)}.json`, 'application/json');
-            showNotification('✅', 'Export erfolgreich', 'JSON-Datei wurde heruntergeladen');
-            sounds.success();
-        }
-
-        function downloadFile(content, filename, type) {
-            const blob = new Blob([content], { type: type + ';charset=utf-8;' });
-            const link = document.createElement('a');
+            const blob = new Blob([csvContent], { type: 'text/csv' });
             const url = URL.createObjectURL(blob);
-            
-            link.setAttribute('href', url);
-            link.setAttribute('download', filename);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `reaction_timer_results_${new Date().toISOString().slice(0,10)}.csv`;
+            a.click();
             URL.revokeObjectURL(url);
         }
 
-        // Keyboard Shortcuts
+        // Event Listeners
+        function setupEventListeners() {
+            document.getElementById('minWait').addEventListener('change', function() {
+                const minWait = parseInt(this.value);
+                const maxWait = parseInt(document.getElementById('maxWait').value);
+                
+                if (minWait >= maxWait) {
+                    document.getElementById('maxWait').value = minWait + 1000;
+                }
+                saveSettings();
+            });
+
+            document.getElementById('maxWait').addEventListener('change', function() {
+                const maxWait = parseInt(this.value);
+                const minWait = parseInt(document.getElementById('minWait').value);
+                
+                if (maxWait <= minWait) {
+                    document.getElementById('minWait').value = Math.max(500, maxWait - 1000);
+                }
+                saveSettings();
+            });
+
+            ['signalType', 'reactionKey'].forEach(id => {
+                document.getElementById(id).addEventListener('change', saveSettings);
+            });
+        }
+
         function setupKeyboardShortcuts() {
             document.addEventListener('keydown', (event) => {
                 // Reaction key
@@ -2434,7 +907,7 @@
                     return;
                 }
                 
-                // Shortcuts
+                // Don't trigger shortcuts when typing in inputs
                 if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT') return;
                 
                 switch(event.key.toLowerCase()) {
@@ -2444,45 +917,15 @@
                     case 'r':
                         resetResults();
                         break;
-                    case 'd':
-                        downloadCSV();
+                    case 'e':
+                        exportData();
                         break;
                     case 't':
-                        toggleDarkMode();
+                        toggleTheme();
                         break;
                 }
             });
         }
-
-        // Event Listeners
-        document.getElementById('minWait').addEventListener('change', function() {
-            const minWait = parseInt(this.value);
-            const maxWait = parseInt(document.getElementById('maxWait').value);
-            
-            if (minWait >= maxWait) {
-                document.getElementById('maxWait').value = minWait + 1000;
-            }
-            saveSettings();
-        });
-
-        document.getElementById('maxWait').addEventListener('change', function() {
-            const maxWait = parseInt(this.value);
-            const minWait = parseInt(document.getElementById('minWait').value);
-            
-            if (maxWait <= minWait) {
-                document.getElementById('minWait').value = Math.max(500, maxWait - 1000);
-            }
-            saveSettings();
-        });
-
-        document.getElementById('reactionKey').addEventListener('change', function() {
-            if (testState !== 'idle') {
-                updateUI();
-            }
-            saveSettings();
-        });
-
-        document.getElementById('signalType').addEventListener('change', saveSettings);
     </script>
 </body>
 </html>
